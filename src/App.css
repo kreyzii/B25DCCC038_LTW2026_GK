@@ -42,3 +42,35 @@ th, td {
 th {
   background: #f0f2f7;
 }
+tr.favorite {
+  background: #fff8c4;
+}
+tbody tr:hover {
+  background: #e6f0ff;
+}
+
+/* Nút và ô nhập */
+button {
+  padding: 6px 12px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+button:hover {
+  background: #eee;
+}
+input, select {
+  padding: 6px 8px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+
+/* Form thêm mới */
+form div {
+  margin-bottom: 12px;
+}
+form label {
+  display: inline-block;
+  width: 120px;
+}
