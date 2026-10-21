@@ -12,14 +12,20 @@ const ContactTable = ({ contacts, onDelete, onToggleFavorite }) => (
       </tr>
     </thead>
     <tbody>
-      {contacts.map((contact) => (
-        <ContactRow
-          key={contact.id}
-          contact={contact}
-          onDelete={onDelete}
-          onToggleFavorite={onToggleFavorite}
-        />
-      ))}
+      {contacts.length === 0 ? (
+        <tr>
+          <td colSpan="5">Không có dữ liệu</td>
+        </tr>
+      ) : (
+        contacts.map((contact) => (
+          <ContactRow
+            key={contact.id}
+            contact={contact}
+            onDelete={onDelete}
+            onToggleFavorite={onToggleFavorite}
+          />
+        ))
+      )}
     </tbody>
   </table>
 );

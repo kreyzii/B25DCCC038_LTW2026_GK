@@ -26,6 +26,14 @@ const AddContact = ({ onAdd }) => {
       setError("Vui lòng nhập đầy đủ thông tin");
       return;
     }
+    if (!/^0\d{9}$/.test(data.phone)) {
+      setError("Số điện thoại phải gồm 10 chữ số và bắt đầu bằng số 0");
+      return;
+    }
+    if (!data.email.includes("@")) {
+      setError("Email không hợp lệ");
+      return;
+    }
 
     onAdd(data);
     navigate("/contacts", { replace: true });

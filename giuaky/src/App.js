@@ -14,14 +14,41 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Tải dữ liệu: ưu tiên localStorage, không có thì gọi API
   useEffect(() => {
+    const saved = localStorage.getItem("gk_contacts");
+    if (saved) {
+      try {
+        setContacts(JSON.parse(saved));
+        setLoading(false);
+        return;
+      } catch (e) {
+        // dữ liệu lưu bị hỏng thì bỏ qua, gọi API
+      }
+    }
+
     const controller = new AbortController();
     axios
       .get("/data/contacts.json", { signal: controller.signal })
-      .then(({ data }) => setContacts(data))
-      .catch(() => setError("Không tải được dữ liệu"))
-      .finally(() => setLoading(false));
+      .then(({ data }) => {
+        setContacts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (axios.isCancel(err)) return;
+        setError("Không tải được dữ liệu");
+        setLoading(false);
+      });
+
+    return () => controller.abort();
   }, []);
+
+  // Lưu dữ liệu: chỉ lưu khi đã tải xong và không lỗi
+  useEffect(() => {
+    if (!loading && !error) {
+      localStorage.setItem("gk_contacts", JSON.stringify(contacts));
+    }
+  }, [contacts, loading, error]);
 
   const addContact = (data) => {
     const newId = Math.max(0, ...contacts.map(({ id }) => id)) + 1;
@@ -46,7 +73,7 @@ const App = () => {
     <div data-build={BUILD_TAG}>
       <Routes>
         <Route path="/" element={<Layout loading={loading} error={error} />}>
-          <Route index element={<Home />} />
+          <Route index element={<Home contacts={contacts} />} />
           <Route
             path="contacts"
             element={
